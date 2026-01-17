@@ -1677,9 +1677,6 @@ select {
 .resize-none {
   resize: none;
 }
-.resize {
-  resize: both;
-}
 .scroll-py-2 {
   scroll-padding-top: 0.5rem;
   scroll-padding-bottom: 0.5rem;

@@ -8803,27 +8803,27 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => __vitePreload(() => import("./Home-03dd5e04.js"), true ? [] : void 0)
+    component: () => __vitePreload(() => import("./Home-2c6748f1.js"), true ? [] : void 0)
   },
   {
     path: "/voucher/:type?",
     name: "Voucher",
-    component: () => __vitePreload(() => import("./Voucher-d880af80.js"), true ? [] : void 0)
+    component: () => __vitePreload(() => import("./Voucher-c28ae1a7.js"), true ? [] : void 0)
   },
   {
     path: "/daybook",
     name: "Daybook",
-    component: () => __vitePreload(() => import("./Daybook-eec9682f.js"), true ? ["assets/Daybook-eec9682f.js","assets/Daybook-61a257e9.css"] : void 0)
+    component: () => __vitePreload(() => import("./Daybook-012c1558.js"), true ? ["assets/Daybook-012c1558.js","assets/Daybook-61a257e9.css"] : void 0)
   },
   {
     path: "/import",
     name: "Import",
-    component: () => __vitePreload(() => import("./ImportWizard-25460951.js"), true ? [] : void 0)
+    component: () => __vitePreload(() => import("./ImportWizard-d590c022.js"), true ? [] : void 0)
   },
   {
     path: "/employees",
     name: "Employees",
-    component: () => __vitePreload(() => import("./Employees-e5c42da8.js"), true ? [] : void 0)
+    component: () => __vitePreload(() => import("./Employees-0461fe33.js"), true ? [] : void 0)
   }
 ];
 let router = createRouter({

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
+import { frappeRequest } from 'frappe-ui'
 
 export const useVoucherStore = defineStore('voucher', () => {
     // Standpoints (Multiple Truths)
@@ -10,17 +11,36 @@ export const useVoucherStore = defineStore('voucher', () => {
         validationError: null,
     })
 
-    const serverState = ref(null) // The "truth" according to the database
-    const auditLog = ref([])      // The chronological history of changes
+    const serverState = ref(null)
+    const auditLog = ref([])
+    const masters = reactive({
+        accounts: [],
+        items: [],
+        taxTemplates: []
+    })
 
-    // Actions representing different perspectives
     function updateFromUI(data) {
-        // The Operator's Truth: Instant feedback
         if (data.header) Object.assign(clientState.header, data.header)
-        if (data.items) clientState.items = data.items
-
+        if (data.items) clientState.items = [...data.items]
         validate()
         addToAuditLog('User updated voucher in UI')
+    }
+
+    async function fetchMasters() {
+        try {
+            const data = await frappeRequest({
+                method: 'velocity.api.get_master_data'
+            })
+            if (data) {
+                masters.accounts = data.accounts || []
+                masters.items = data.items || []
+                masters.taxTemplates = data.tax_templates || []
+                addToAuditLog('Fetched master data using frappeRequest')
+            }
+        } catch (error) {
+            console.error('Failed to fetch masters', error)
+            addToAuditLog('Failed to fetch masters')
+        }
     }
 
     async function syncWithServer() {
@@ -86,7 +106,9 @@ export const useVoucherStore = defineStore('voucher', () => {
         clientState,
         serverState,
         auditLog,
+        masters,
         updateFromUI,
+        fetchMasters,
         syncWithServer,
         validate
     }

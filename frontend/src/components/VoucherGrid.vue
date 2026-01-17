@@ -19,6 +19,7 @@ import { AgGridVue } from 'ag-grid-vue3'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { evaluate } from 'mathjs'
+import { useVoucherStore } from '@/stores/voucher'
 
 const props = defineProps({
   voucherType: {
@@ -28,15 +29,25 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-
 const gridApi = ref(null)
+const voucherStore = useVoucherStore()
 
 // --- Anekantavada: Contextual Columns ---
-// The grid shape shifts based on the "Standpoint" (Voucher Type)
 const columnDefs = computed(() => {
+  const accountOptions = voucherStore.masters.accounts.map(a => a.name)
+
   const common = [
     { headerName: "#", valueGetter: "node.rowIndex + 1", width: 50, suppressMenu: true },
-    { field: "account", headerName: "Account / Ledger", editable: true, flex: 2 },
+    { 
+        field: "account", 
+        headerName: "Account / Ledger", 
+        editable: true, 
+        flex: 2,
+        cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+            values: accountOptions
+        }
+    },
   ]
 
   const moneyCols = [
@@ -44,7 +55,6 @@ const columnDefs = computed(() => {
        field: "debit", 
        editable: true, 
        valueParser: numberParser, 
-       params: { type: 'debit' },
        cellClass: 'text-right font-bold text-gray-700',
        flex: 1
      },
@@ -59,11 +69,19 @@ const columnDefs = computed(() => {
 
   const narration = [{ field: "narration", editable: true, flex: 2 }]
 
-  // Specialized Views
   if (['sales', 'purchase'].includes(props.voucherType)) {
       return [
           { headerName: "#", valueGetter: "node.rowIndex + 1", width: 50 },
-          { field: "item", headerName: "Item / Service", editable: true, flex: 2 },
+          { 
+              field: "item", 
+              headerName: "Item / Service", 
+              editable: true, 
+              flex: 2,
+              cellEditor: 'agSelectCellEditor',
+              cellEditorParams: {
+                  values: voucherStore.masters.items.map(i => i.name)
+              }
+          },
           { field: "qty", editable: true, width: 80, valueParser: numberParser },
           { field: "rate", editable: true, width: 100, valueParser: numberParser },
           { 
@@ -81,47 +99,33 @@ const columnDefs = computed(() => {
 
 const defaultColDef = {
   resizable: true,
-  sortable: false, // Order matters in accounting
+  sortable: false,
   filter: false,
 }
 
-const rowData = ref([
-    { account: '', debit: 0, credit: 0, narration: '' },
-    { account: '', debit: 0, credit: 0, narration: '' },
-    { account: '', debit: 0, credit: 0, narration: '' },
-    { account: '', debit: 0, credit: 0, narration: '' },
-    { account: '', debit: 0, credit: 0, narration: '' },
-])
+const rowData = computed(() => voucherStore.clientState.items)
 
 const gridOptions = {
-    rowHeight: 32, // High density
+    rowHeight: 32,
     headerHeight: 32,
     suppressCellFocus: false,
     enableRangeSelection: true,
     singleClickEdit: false,
     stopEditingWhenCellsLoseFocus: true,
     enterMovesDown: true,
-    onGridReady: (params) => {
-        gridApi.value = params.api
-        params.api.sizeColumnsToFit()
-    }
 }
 
-// --- Logic: Math Evaluator ---
 function numberParser(params) {
     const newVal = params.newValue
     if (!newVal) return 0
     if (typeof newVal === 'number') return newVal
 
-    // Check if it's an expression like "=100+50" or just "100+50"
     if (newVal.toString().match(/[+\-*/]/)) {
         try {
             const cleanExp = newVal.toString().replace('=', '')
             const result = evaluate(cleanExp)
-            console.log(`[Math] Evaluated ${newVal} -> ${result}`)
             return result
         } catch (e) {
-            console.warn("Invalid math expression", e)
             return 0
         }
     }
@@ -129,18 +133,24 @@ function numberParser(params) {
 }
 
 function onCellValueChanged(event) {
-    // Audit Trail Hook could go here
-    console.log('Cell changed', event.data)
+    voucherStore.updateFromUI({ items: voucherStore.clientState.items })
 }
-
-// Watcher to resize when type changes
-watch(() => props.voucherType, () => {
-    // Reset or re-calc logic
-})
 
 const onGridReady = (params) => {
     gridApi.value = params.api;
+    params.api.sizeColumnsToFit()
 }
+
+// Initialize empty rows if none
+onMounted(() => {
+    if (voucherStore.clientState.items.length === 0) {
+        const initialRows = []
+        for(let i=0; i<10; i++) {
+            initialRows.push({ account: '', debit: 0, credit: 0, narration: '' })
+        }
+        voucherStore.clientState.items = initialRows
+    }
+})
 </script>
 
 <style>

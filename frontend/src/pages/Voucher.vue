@@ -51,7 +51,7 @@
   </div>
 </template>
 
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { FeatherIcon, Button, Toast } from 'frappe-ui'
 import VoucherGrid from '@/components/VoucherGrid.vue'
@@ -68,6 +68,10 @@ const route = useRoute()
 const voucherStore = useVoucherStore()
 const isSaving = ref(false)
 const toast = ref({ show: false, message: '', icon: '' })
+
+onMounted(() => {
+    voucherStore.fetchMasters()
+})
 
 const currentType = computed(() => {
     return route.params.type || 'journal'
