@@ -1,0 +1,33 @@
+{
+  "name": "frappe-ui-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "ag-grid-community": "^35.0.0",
+    "ag-grid-vue3": "^35.0.0",
+    "dayjs": "^1.11.19",
+    "esbuild": "^0.19.11",
+    "fast-xml-parser": "^5.3.3",
+    "feather-icons": "^4.28.0",
+    "frappe-ui": "^0.0.105",
+    "idb-keyval": "^6.2.2",
+    "mathjs": "^15.1.0",
+    "pinia": "^3.0.4",
+    "terser": "^5.46.0",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.0",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.15",
+    "vite": "^4.5.0"
+  }
+}
