@@ -26,10 +26,14 @@ const routes = [
     name: 'Employees',
     component: () => import('@/pages/Employees.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/',
+  },
 ]
 
 let router = createRouter({
-  history: createWebHistory('/frontend'),
+  history: createWebHistory('/frontend/velocity'),
   routes,
 })
 

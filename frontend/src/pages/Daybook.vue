@@ -13,7 +13,7 @@
     </header>
 
     <main class="flex-grow p-4 overflow-hidden relative">
-      <div class="absolute inset-4 rounded-lg overflow-hidden shadow-sm border border-gray-200 bg-white ag-theme-alpine">
+      <div class="absolute inset-4 rounded-lg overflow-hidden shadow-sm border border-gray-200 bg-white ag-theme-quartz">
         <ag-grid-vue
           class="w-full h-full"
           :columnDefs="columnDefs"
@@ -31,8 +31,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { AgGridVue } from 'ag-grid-vue3'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Button } from 'frappe-ui'
 import dayjs from 'dayjs'
 

@@ -251,6 +251,8 @@ app_license = "mit"
 # ignore_translatable_strings_from = []
 
 website_route_rules = [
+    {"from_route": "/frontend/velocity", "to_route": "velocity"},
+    {"from_route": "/frontend/velocity/<path:app_path>", "to_route": "velocity"},
     {"from_route": "/velocity", "to_route": "velocity"},
     {"from_route": "/velocity/<path:app_path>", "to_route": "velocity"},
 ]

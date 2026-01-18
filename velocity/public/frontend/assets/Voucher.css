@@ -1,0 +1,19 @@
+
+/* Custom Aesthetic: The "Velocity" Look */
+.ag-theme-quartz {
+    --ag-foreground-color: #1f2937;
+    --ag-background-color: #ffffff;
+    --ag-header-foreground-color: #6b7280;
+    --ag-header-background-color: #f9fafb;
+    --ag-row-hover-color: #f3f4f6;
+    --ag-selected-row-background-color: #eff6ff;
+    --ag-row-border-color: #e5e7eb;
+    --ag-cell-horizontal-border: solid 1px #e5e7eb;
+    --ag-borders: none;
+    font-family: 'Inter', monospace; /* Tabular nums */
+}
+
+/* Hide Focus Ring for cleaner UI */
+.ag-theme-quartz .ag-cell-focus {
+    border: 2px solid #10b981 !important; /* Emerald-500 */
+}

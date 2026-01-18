@@ -1,24 +1,4 @@
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
-import { H as set, j as ref, o as openBlock, c as createElementBlock, a as createBaseVNode, b as createVNode, d as unref, t as toDisplayString, w as withCtx, I as Fragment, J as renderList, K as createCommentVNode, _ as _sfc_main$1, f as createTextVNode, B as Button } from "./index-24a1dea7.js";
+import { Z as set, m as ref, a as openBlock, c as createElementBlock, b as createBaseVNode, d as createVNode, e as unref, t as toDisplayString, w as withCtx, F as Fragment, f as renderList, g as createCommentVNode, _ as _sfc_main$1, h as createTextVNode, B as Button } from "./index.js";
 const nameStartChar = ":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD";
 const nameChar = nameStartChar + "\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040";
 const nameRegexp = "[" + nameStartChar + "][" + nameChar + "]*";
@@ -1516,10 +1496,9 @@ const parser = new XMLParser({
   attributeNamePrefix: "@_"
 });
 function parseTallyMasters(xmlContent) {
-  var _a, _b, _c, _d;
   try {
     const jObj = parser.parse(xmlContent);
-    const messages = ((_d = (_c = (_b = (_a = jObj == null ? void 0 : jObj.ENVELOPE) == null ? void 0 : _a.BODY) == null ? void 0 : _b.IMPORTDATA) == null ? void 0 : _c.REQUESTDATA) == null ? void 0 : _d.TALLYMESSAGE) || [];
+    const messages = jObj?.ENVELOPE?.BODY?.IMPORTDATA?.REQUESTDATA?.TALLYMESSAGE || [];
     const ledgers = [];
     const msgArray = Array.isArray(messages) ? messages : [messages];
     msgArray.forEach((msg) => {
@@ -1542,17 +1521,15 @@ function parseTallyMasters(xmlContent) {
   }
 }
 const MASTERS_KEY = "velocity_masters";
-function cacheMasters(data) {
-  return __async(this, null, function* () {
-    if (!data)
-      return;
-    yield set(MASTERS_KEY, {
-      timestamp: Date.now(),
-      accounts: data.accounts || [],
-      items: data.items || []
-    });
-    console.log("[Offline] Masters Cached");
+async function cacheMasters(data) {
+  if (!data)
+    return;
+  await set(MASTERS_KEY, {
+    timestamp: Date.now(),
+    accounts: data.accounts || [],
+    items: data.items || []
   });
+  console.log("[Offline] Masters Cached");
 }
 const _hoisted_1 = { class: "h-screen flex flex-col bg-gray-50" };
 const _hoisted_2 = { class: "flex-grow p-8 flex flex-col items-center justify-center" };
@@ -1598,13 +1575,13 @@ const _sfc_main = {
       };
       reader.readAsText(file);
     };
-    const confirmImport = () => __async(this, null, function* () {
+    const confirmImport = async () => {
       isImporting.value = true;
       try {
         const mappedData = {
           accounts: parsedData.value.data.map((d) => ({ name: d.name, account_type: "Ledger", balance: d.openingBalance }))
         };
-        yield cacheMasters(mappedData);
+        await cacheMasters(mappedData);
         alert("Import Successful! Data cached locally.");
         parsedData.value = null;
       } catch (e) {
@@ -1612,7 +1589,7 @@ const _sfc_main = {
       } finally {
         isImporting.value = false;
       }
-    });
+    };
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("div", _hoisted_1, [
         _cache[6] || (_cache[6] = createBaseVNode("header", { class: "bg-white border-b border-gray-200 px-6 py-4" }, [

@@ -51,6 +51,7 @@
   </div>
 </template>
 
+<script setup>
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { FeatherIcon, Button, Toast } from 'frappe-ui'
@@ -129,3 +130,4 @@ const configs = {
 }
 
 const voucherConfig = computed(() => configs[currentType.value] || configs.journal)
+</script>

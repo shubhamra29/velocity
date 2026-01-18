@@ -1,5 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div v-if="error" class="bg-red-500 text-white p-4 font-mono text-sm whitespace-pre-wrap">
+      <strong>Application Error:</strong>
+      {{ error }}
+    </div>
     <CommandPalette />
     <main class="flex-grow">
       <router-view />
@@ -26,8 +30,16 @@
 </template>
 
 <script setup>
+import { ref, onErrorCaptured } from 'vue'
 import CommandPalette from '@/components/CommandPalette.vue'
 import { useTheme } from '@/composables/useTheme'
+
+const error = ref(null)
+
+onErrorCaptured((err) => {
+  error.value = err.toString()
+  return false
+})
 
 const { isDark } = useTheme()
 </script>

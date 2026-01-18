@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full ag-theme-alpine font-mono text-sm">
+  <div class="h-full w-full ag-theme-quartz font-mono text-sm">
     <ag-grid-vue
       class="w-full h-full"
       :columnDefs="columnDefs"
@@ -16,8 +16,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { AgGridVue } from 'ag-grid-vue3'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { evaluate } from 'mathjs'
 import { useVoucherStore } from '@/stores/voucher'
 
@@ -109,7 +107,6 @@ const gridOptions = {
     rowHeight: 32,
     headerHeight: 32,
     suppressCellFocus: false,
-    enableRangeSelection: true,
     singleClickEdit: false,
     stopEditingWhenCellsLoseFocus: true,
     enterMovesDown: true,
@@ -155,7 +152,7 @@ onMounted(() => {
 
 <style>
 /* Custom Aesthetic: The "Velocity" Look */
-.ag-theme-alpine {
+.ag-theme-quartz {
     --ag-foreground-color: #1f2937;
     --ag-background-color: #ffffff;
     --ag-header-foreground-color: #6b7280;
@@ -169,7 +166,7 @@ onMounted(() => {
 }
 
 /* Hide Focus Ring for cleaner UI */
-.ag-theme-alpine .ag-cell-focus {
+.ag-theme-quartz .ag-cell-focus {
     border: 2px solid #10b981 !important; /* Emerald-500 */
 }
 </style>

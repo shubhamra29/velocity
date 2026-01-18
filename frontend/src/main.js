@@ -1,4 +1,8 @@
 import './index.css'
+import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
+
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
-import { frappeRequest } from 'frappe-ui'
+import { call } from 'frappe-ui'
 
 export const useVoucherStore = defineStore('voucher', () => {
     // Standpoints (Multiple Truths)
@@ -28,9 +28,7 @@ export const useVoucherStore = defineStore('voucher', () => {
 
     async function fetchMasters() {
         try {
-            const data = await frappeRequest({
-                method: 'velocity.api.get_master_data'
-            })
+            const data = await call('velocity.api.get_master_data')
             if (data) {
                 masters.accounts = data.accounts || []
                 masters.items = data.items || []

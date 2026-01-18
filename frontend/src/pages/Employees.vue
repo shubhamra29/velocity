@@ -5,7 +5,7 @@
         <h1 class="text-xl font-bold text-gray-900 tracking-tight">Employees</h1>
         <p class="text-xs text-gray-500 font-mono mt-1">Payroll Lite</p>
       </div>
-      <Button variant="solid" icon-left="plus">Add Employee</Button>
+      <Button variant="solid" icon-left="plus" @click="isDialogOpen = true">Add Employee</Button>
     </header>
 
     <main class="flex-grow p-4">
@@ -38,17 +38,61 @@
               </tbody>
           </table>
        </div>
+
+       <Dialog v-model="isDialogOpen">
+         <template #body-title>
+           <h3 class="text-lg font-bold">Add New Employee</h3>
+         </template>
+         <template #body-content>
+           <div class="space-y-4">
+             <Input label="Full Name" v-model="newEmployee.name" />
+             <Input label="Department" v-model="newEmployee.department" />
+             <Input label="Basic Salary" type="number" v-model="newEmployee.salary" />
+           </div>
+         </template>
+         <template #actions>
+           <Button variant="solid" :loading="isSaving" @click="addEmployee">Save Employee</Button>
+           <Button variant="subtle" @click="isDialogOpen = false">Cancel</Button>
+         </template>
+       </Dialog>
     </main>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { Button } from 'frappe-ui'
+import { Button, Dialog, Input, call } from 'frappe-ui'
 
 const employees = ref([
     { id: 1, name: 'Aditya Kumar', department: 'Accounts', salary: 45000 },
     { id: 2, name: 'Sneha Gupta', department: 'Sales', salary: 38000 },
     { id: 3, name: 'Rahul Sharma', department: 'Operations', salary: 32000 },
 ])
+
+const isDialogOpen = ref(false)
+const isSaving = ref(false)
+const newEmployee = ref({ name: '', department: '', salary: 0 })
+
+async function addEmployee() {
+    if (!newEmployee.value.name) return
+    
+    isSaving.value = true
+    try {
+        const response = await call('velocity.api.save_employee', { doc: newEmployee.value })
+        
+        if (response && response.status === 'success') {
+            employees.value.push({
+                id: Date.now(),
+                ...newEmployee.value
+            })
+            isDialogOpen.value = false
+            newEmployee.value = { name: '', department: '', salary: 0 }
+        }
+    } catch (e) {
+        console.error(e)
+        alert('Failed to save employee')
+    } finally {
+        isSaving.value = false
+    }
+}
 </script>
